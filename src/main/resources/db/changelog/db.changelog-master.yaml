@@ -1,0 +1,106 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-createTable.yaml
+  - changeSet:
+      id: 1
+      author: your_liquibase_username
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: users_name
+                  type: varchar(100)
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: text
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  autoIncrement: false
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: 2
+      author: your_liquibase_username
+      changes:
+        - createTable:
+            tableName: movies
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(100)
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: poster_path
+                  type: text
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 3
+      author: your_liquibase_username
+      changes:
+        - createTable:
+            tableName: movies
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  autoIncrement: false
+                  constraints:
+                    foreignKeyName: fk_users
+                    references: users(id)
+                    nullable: false
+              - column:
+                  name: movies_id
+                  type: bigint
+                  autoIncrement: false
+                  constraints:
+                    foreignKeyName: fk_movies
+                    references: movies(id)
+                    nullable: false
+  - changeSet:
+      id: 4
+      author: your_liquibase_username
+      changes:
+        - addUniqueConstraint:
+            columnNames: email, users_name
+            constraintName: constraint_users
+            tableName: users
+  - changeSet:
+      id: 5
+      author: your_liquibase_username
+      changes:
+        - addUniqueConstraint:
+            columnNames: title
+            constraintName: constraint_movies
+            tableName: movies
