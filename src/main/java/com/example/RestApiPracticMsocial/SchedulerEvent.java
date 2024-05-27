@@ -35,7 +35,7 @@ public class SchedulerEvent {
      сожелению в нём нет постарничной навигации
      для примера беру 50 фильмов и сериалов каждые 3 часа */
 
-    @Scheduled(fixedDelayString = "PT03Н")
+    @Scheduled(fixedDelayString = "PT03H")
     private void MoviesCollectionEvent() {
         int idMovie;
         if(movieService.getCount()==0) {
