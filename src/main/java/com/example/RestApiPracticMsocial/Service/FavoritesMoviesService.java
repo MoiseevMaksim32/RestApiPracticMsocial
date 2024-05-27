@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class FavoritesMoviesService {
-    // На всякий случай была реализована полнось CRUD система
+    // На всякий случай была реализована полностью CRUD система
     private FavoritesMoviesRepository favoritesMoviesRepository;
     private MoviesService moviesService;
     private UsersService usersService;
@@ -41,7 +41,7 @@ public class FavoritesMoviesService {
 
     public FavoritesMovies readById(Long id){
         return favoritesMoviesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("В таблицы Roles нет значения с таким: "+id));
+                new RuntimeException("В таблицы избранных нет значения с таким: "+id));
     }
 
     public void delete(Long id){

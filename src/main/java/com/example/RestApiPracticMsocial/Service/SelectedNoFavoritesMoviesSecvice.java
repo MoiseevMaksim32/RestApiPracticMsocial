@@ -29,11 +29,11 @@ public class SelectedNoFavoritesMoviesSecvice {
                 if(i.getMovie().getId() != j.getId()) result.add(j);
             }
         }
-        log.info("Пользователь с id - "+id+" получил список фильмов кторых нет у него в избранных");
+        log.info("Пользователь с id - "+id+" получил список фильмов которых нет у него в избранных");
         return result;
     }
     public List<Movies> NoMoviesFavoritesUserSQL(Long id){
-        log.info("Пользователь с id - "+id+" получил список фильмов кторых нет у него в избранных");
+        log.info("Пользователь с id - "+id+" получил список фильмов которых нет у него в избранных");
         return moviesRepository.findAllNoMoviesFavoritesUser(id);
     }
 }

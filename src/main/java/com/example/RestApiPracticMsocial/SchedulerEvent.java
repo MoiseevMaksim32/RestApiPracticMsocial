@@ -15,12 +15,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 @Service
 @Slf4j
+@EnableScheduling
 public class SchedulerEvent {
     ObjectMapper  mapper = new ObjectMapper();
     final CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -33,7 +35,7 @@ public class SchedulerEvent {
      сожелению в нём нет постарничной навигации
      для примера беру 50 фильмов и сериалов каждые 3 часа */
 
-    @Scheduled(fixedDelayString = "PT03H")
+    @Scheduled(fixedDelayString = "PT03Н")
     private void MoviesCollectionEvent() {
         int idMovie;
         if(movieService.getCount()==0) {

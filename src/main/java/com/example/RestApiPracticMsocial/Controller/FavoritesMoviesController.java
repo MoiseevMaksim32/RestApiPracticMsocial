@@ -29,7 +29,7 @@ public class FavoritesMoviesController {
     public ResponseEntity<List<FavoritesMovies>> readAll(@RequestParam("User-Id") Long id){
         return new ResponseEntity<>(service.readAll(id), HttpStatus.OK);
     }
-    // Про изменение записей вроде ничего не написано но пусть будет
+    // Про изменение записей вроде ничего не написано, но пусть будет
     @PutMapping
     public ResponseEntity<FavoritesMovies> update(@RequestBody FavoritesMovies favoritesMovies){
         return new ResponseEntity<>(service.update(favoritesMovies), HttpStatus.OK);
@@ -42,7 +42,7 @@ public class FavoritesMoviesController {
             service.delete(favorites_id);
             return HttpStatus.OK;
         }else{
-            log.error("Пользователь указал неправильных id");
+            log.error("Пользователь указал неправильный id");
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }

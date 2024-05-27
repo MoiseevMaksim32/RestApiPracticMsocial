@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class UsersService {
-    // На всякий случай была реализована полнось CRUD система
+    // На всякий случай была реализована полностью CRUD система
     private final UsersRepository usersRepository;
 
     public Users create(UsersDTO dto){
@@ -32,7 +32,7 @@ public class UsersService {
 
     public Users readById(Long id){
         return usersRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("В таблицы Roles нет значения с таким: "+id));
+                new RuntimeException("В таблицы пользователей нет значения с таким: "+id));
     }
 
     public void delete(Long id){

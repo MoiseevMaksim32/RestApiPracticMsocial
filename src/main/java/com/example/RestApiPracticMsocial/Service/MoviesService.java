@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class MoviesService {
-    // На всякий случай была реализована полнось CRUD система
+    // На всякий случай была реализована полностью CRUD система
     private final MoviesRepository moviesRepository;
 
     public Movies create(MoviesDTO dto) {
@@ -45,7 +45,7 @@ public class MoviesService {
 
     public Movies readById(Long id){
         return moviesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("В таблицы Roles нет значения с таким: "+id));
+                new RuntimeException("В таблицы фильмов нет значения с таким: "+id));
     }
     public void delete(Long id){
         moviesRepository.deleteById(id);
