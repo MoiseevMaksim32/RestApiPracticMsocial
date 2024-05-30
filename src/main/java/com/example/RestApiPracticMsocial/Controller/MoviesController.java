@@ -11,6 +11,8 @@ import com.example.RestApiPracticMsocial.Service.SelectedNoFavoritesMoviesSecvic
 import com.example.RestApiPracticMsocial.Service.UsersService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +31,19 @@ public class MoviesController {
 
     // Put, Post и Delete убранны т.к о них не уточнялось в условии
 
-    @GetMapping("/All") // Если убрать то убудет ошибка неоднозначности, spring считает что методы readAll и getNoMoviesFavoritesUse
-    public ResponseEntity<List<Movies>> readAll(@RequestParam(name ="page") Integer page){
-        return new ResponseEntity<>(service.readAll(page).getContent(), HttpStatus.OK);
+    @GetMapping("/All")
+    // Если убрать то убудет ошибка неоднозначности, spring считает что методы readAll и getNoMoviesFavoritesUse
+    public ResponseEntity<List<Movies>> readAll(@RequestParam(name = "page") Integer page, @RequestParam(name = "sizePage", defaultValue = "15", required = false) Integer size) {
+        return new ResponseEntity<>(service.readAll(page, size).getContent(), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<Movies>> getNoMoviesFavoritesUser(@RequestParam("User-Id") Long id, @RequestParam("loaderType") String loaderType){
-        if(loaderType.equals("sql")){
-            return new ResponseEntity<>(selectedNoFavoritesMoviesSecvice.NoMoviesFavoritesUserSQL(id), HttpStatus.OK);
-        }else if(loaderType.equals("inMemory")){
-            return new ResponseEntity<>(selectedNoFavoritesMoviesSecvice.NoMoviesFavoritesUserInMemory(id), HttpStatus.OK);
+    public ResponseEntity<Page<Movies>> getNoMoviesFavoritesUser(@RequestParam("User-Id") Long id, @RequestParam("loaderType") String loaderType, @RequestParam(name = "page") Integer page, @RequestParam(name = "sizePage", defaultValue = "15", required = false) Integer size) {
+        if (loaderType.equals("sql")) {
+            return new ResponseEntity<>(selectedNoFavoritesMoviesSecvice.NoMoviesFavoritesUserSQL(id, page, size), HttpStatus.OK);
+        } else if (loaderType.equals("inMemory")) {
+            return new ResponseEntity<>(selectedNoFavoritesMoviesSecvice.NoMoviesFavoritesUserInMemory(id, page, size), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new RuntimeException("Что-то пошло не так");
     }
 }

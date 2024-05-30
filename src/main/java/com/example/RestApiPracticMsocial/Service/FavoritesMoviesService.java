@@ -1,17 +1,12 @@
 package com.example.RestApiPracticMsocial.Service;
 
 import com.example.RestApiPracticMsocial.DTO.FavoritesMoviesDTO;
-import com.example.RestApiPracticMsocial.DTO.MoviesDTO;
 import com.example.RestApiPracticMsocial.Model.FavoritesMovies;
-import com.example.RestApiPracticMsocial.Model.Movies;
 import com.example.RestApiPracticMsocial.Repository.FavoritesMoviesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,28 +18,28 @@ public class FavoritesMoviesService {
     private MoviesService moviesService;
     private UsersService usersService;
 
-    public FavoritesMovies create(Long id,FavoritesMoviesDTO dto){
+    public FavoritesMovies create(Long id, FavoritesMoviesDTO dto) {
         FavoritesMovies favoritesMovies = FavoritesMovies.builder().user(usersService.readById(id))
                 .movie(moviesService.readById(dto.getMovieId())).build();
-        log.info("Новая запись в избранных была создана пользователем с id - "+id+", он выбрал фильм с id "+dto.getMovieId());
+        log.info("Новая запись в избранных была создана пользователем с id - " + id + ", он выбрал фильм с id " + dto.getMovieId());
         return favoritesMoviesRepository.save(favoritesMovies);
     }
 
-    public List<FavoritesMovies> readAll(Long id){
-        log.info("Пользователь с id - "+id+" запросил список избранных");
+    public List<FavoritesMovies> readAll(Long id) {
+        log.info("Пользователь с id - " + id + " запросил список избранных");
         return favoritesMoviesRepository.findAllMoviesUser(id);
     }
 
-    public FavoritesMovies update(FavoritesMovies favoritesMovies){
+    public FavoritesMovies update(FavoritesMovies favoritesMovies) {
         return favoritesMoviesRepository.save(favoritesMovies);
     }
 
-    public FavoritesMovies readById(Long id){
+    public FavoritesMovies readById(Long id) {
         return favoritesMoviesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("В таблицы избранных нет значения с таким: "+id));
+                new RuntimeException("В таблицы избранных нет значения с таким id: " + id));
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         favoritesMoviesRepository.deleteById(id);
     }
 }

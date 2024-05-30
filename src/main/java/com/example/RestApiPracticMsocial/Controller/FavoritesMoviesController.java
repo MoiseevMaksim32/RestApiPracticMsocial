@@ -21,29 +21,31 @@ import java.util.List;
 public class FavoritesMoviesController {
 
     private FavoritesMoviesService service;
+
     @PostMapping
-    public ResponseEntity<FavoritesMovies> create(@RequestParam("User-Id") Long id,@RequestBody FavoritesMoviesDTO dto){
-        return new ResponseEntity<>(service.create(id,dto), HttpStatus.OK);
+    public ResponseEntity<FavoritesMovies> create(@RequestParam("User-Id") Long id, @RequestBody FavoritesMoviesDTO dto) {
+        return new ResponseEntity<>(service.create(id, dto), HttpStatus.OK);
     }
+
     @GetMapping
-    public ResponseEntity<List<FavoritesMovies>> readAll(@RequestParam("User-Id") Long id){
+    public ResponseEntity<List<FavoritesMovies>> readAll(@RequestParam("User-Id") Long id) {
         return new ResponseEntity<>(service.readAll(id), HttpStatus.OK);
     }
+
     // Про изменение записей вроде ничего не написано, но пусть будет
     @PutMapping
-    public ResponseEntity<FavoritesMovies> update(@RequestBody FavoritesMovies favoritesMovies){
+    public ResponseEntity<FavoritesMovies> update(@RequestBody FavoritesMovies favoritesMovies) {
         return new ResponseEntity<>(service.update(favoritesMovies), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public HttpStatus delete(@RequestParam("User-Id") Long id,@RequestParam("favorites_id") Long favorites_id){
+    public HttpStatus delete(@RequestParam("User-Id") Long id, @RequestParam("favorites_id") Long favorites_id) {
         FavoritesMovies favoritesMovies = service.readById(favorites_id);
-        if(favoritesMovies.getUser().getId() == id){
+        if (favoritesMovies.getUser().getId() == id) {
             service.delete(favorites_id);
             return HttpStatus.OK;
-        }else{
-            log.error("Пользователь указал неправильный id");
-            return HttpStatus.INTERNAL_SERVER_ERROR;
+        } else {
+            throw new RuntimeException("Не пытайтесь удалять избранные фильмы других пользователей");
         }
     }
 }

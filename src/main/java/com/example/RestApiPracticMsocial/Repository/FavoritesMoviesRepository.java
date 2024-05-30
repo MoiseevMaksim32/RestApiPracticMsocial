@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FavoritesMoviesRepository extends JpaRepository<FavoritesMovies,Long> {
-
+public interface FavoritesMoviesRepository extends JpaRepository<FavoritesMovies, Long> {
     @Query("Select tab from FavoritesMovies tab where tab.user.id = ?1")
     public List<FavoritesMovies> findAllMoviesUser(Long id);
-
 }

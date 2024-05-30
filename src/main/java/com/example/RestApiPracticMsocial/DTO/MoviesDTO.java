@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Data
 
 public class MoviesDTO {
@@ -22,5 +24,20 @@ public class MoviesDTO {
         this.poster = poster;
     }
     public MoviesDTO(){
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MoviesDTO moviesDTO = (MoviesDTO) o;
+
+        return Objects.equals(title, moviesDTO.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : 0;
     }
 }
