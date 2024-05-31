@@ -31,8 +31,8 @@ public class SchedulerEvent {
 
     ObjectMapper mapper = new ObjectMapper();
     final CloseableHttpClient httpClient = HttpClients.createDefault();
-    private EventConfig eventConfig;
-    private MoviesService movieService;
+    private final EventConfig eventConfig;
+    private final MoviesService movieService;
 
     @Autowired
     public SchedulerEvent(EventConfig eventConfig, MoviesService moviesService) {

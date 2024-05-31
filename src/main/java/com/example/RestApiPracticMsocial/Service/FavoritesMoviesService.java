@@ -5,6 +5,8 @@ import com.example.RestApiPracticMsocial.Model.FavoritesMovies;
 import com.example.RestApiPracticMsocial.Repository.FavoritesMoviesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +27,9 @@ public class FavoritesMoviesService {
         return favoritesMoviesRepository.save(favoritesMovies);
     }
 
-    public List<FavoritesMovies> readAll(Long id) {
+    public Page<FavoritesMovies> readAll(Long id, Integer page, Integer pageSize) {
         log.info("Пользователь с id - " + id + " запросил список избранных");
-        return favoritesMoviesRepository.findAllMoviesUser(id);
+        return favoritesMoviesRepository.findAllMoviesUserPage(id, PageRequest.of(page, pageSize));
     }
 
     public FavoritesMovies update(FavoritesMovies favoritesMovies) {
@@ -41,5 +43,9 @@ public class FavoritesMoviesService {
 
     public void delete(Long id) {
         favoritesMoviesRepository.deleteById(id);
+    }
+
+    public List<FavoritesMovies> readAllNotPage(Long id) {
+        return favoritesMoviesRepository.findAllMoviesUser(id);
     }
 }

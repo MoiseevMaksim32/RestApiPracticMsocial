@@ -55,7 +55,8 @@ public class UsersController {
         }
     }
 
-
+    // метод должен быть недоступен пользователю, т.к используеться для проверки правильности работы,
+    // поэтому пагенацию не делал
     @GetMapping
     public ResponseEntity<List<Users>> readAll() {
         return new ResponseEntity<>(service.readAll(), HttpStatus.OK);

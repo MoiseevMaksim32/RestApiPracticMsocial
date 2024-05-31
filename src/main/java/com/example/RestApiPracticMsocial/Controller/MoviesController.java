@@ -33,12 +33,12 @@ public class MoviesController {
 
     @GetMapping("/All")
     // Если убрать то убудет ошибка неоднозначности, spring считает что методы readAll и getNoMoviesFavoritesUse
-    public ResponseEntity<List<Movies>> readAll(@RequestParam(name = "page") Integer page, @RequestParam(name = "sizePage", defaultValue = "15", required = false) Integer size) {
+    public ResponseEntity<List<Movies>> readAll(@RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer size) {
         return new ResponseEntity<>(service.readAll(page, size).getContent(), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Page<Movies>> getNoMoviesFavoritesUser(@RequestParam("User-Id") Long id, @RequestParam("loaderType") String loaderType, @RequestParam(name = "page") Integer page, @RequestParam(name = "sizePage", defaultValue = "15", required = false) Integer size) {
+    public ResponseEntity<Page<Movies>> getNoMoviesFavoritesUser(@RequestParam("User-Id") Long id, @RequestParam("loaderType") String loaderType, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer size) {
         if (loaderType.equals("sql")) {
             return new ResponseEntity<>(selectedNoFavoritesMoviesSecvice.NoMoviesFavoritesUserSQL(id, page, size), HttpStatus.OK);
         } else if (loaderType.equals("inMemory")) {

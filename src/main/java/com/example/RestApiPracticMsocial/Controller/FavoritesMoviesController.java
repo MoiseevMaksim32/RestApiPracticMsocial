@@ -8,6 +8,7 @@ import com.example.RestApiPracticMsocial.Service.FavoritesMoviesService;
 import com.example.RestApiPracticMsocial.Service.UsersService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class FavoritesMoviesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FavoritesMovies>> readAll(@RequestParam("User-Id") Long id) {
-        return new ResponseEntity<>(service.readAll(id), HttpStatus.OK);
+    public ResponseEntity<Page<FavoritesMovies>> readAll(@RequestParam("User-Id") Long id, @RequestParam("page")Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false)Integer page_size) {
+        return new ResponseEntity<>(service.readAll(id,page,page_size), HttpStatus.OK);
     }
 
     // Про изменение записей вроде ничего не написано, но пусть будет

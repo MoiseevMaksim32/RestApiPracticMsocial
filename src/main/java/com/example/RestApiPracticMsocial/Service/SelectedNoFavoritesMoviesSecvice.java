@@ -25,7 +25,7 @@ public class SelectedNoFavoritesMoviesSecvice {
 
     public Page<Movies> NoMoviesFavoritesUserInMemory(Long id, Integer page, Integer sizePage) {
         Pageable pageable = PageRequest.of(page, sizePage);
-        List<FavoritesMovies> favoritesMovies = favoritesMoviesService.readAll(id);
+        List<FavoritesMovies> favoritesMovies = favoritesMoviesService.readAllNotPage(id);
         List<Movies> movies = moviesService.readAllNoPage();
         List<Movies> resultAll = new ArrayList<>();
         List<Movies> result = new ArrayList<>();
