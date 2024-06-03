@@ -5,6 +5,26 @@ databaseChangeLog:
       author: your_liquibase_username
       changes:
         - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: your_liquibase_username
+      changes:
+        - createTable:
             tableName: users
             columns:
               - column:
@@ -13,6 +33,14 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
+              - column:
+                  name: roles_id
+                  type: bigint
+                  autoIncrement: false
+                  constraints:
+                    foreignKeyName: fk_roles
+                    references: roles(id)
                     nullable: false
               - column:
                   name: users_name
@@ -33,7 +61,7 @@ databaseChangeLog:
                   constraints:
                     nullable: true
   - changeSet:
-      id: 2
+      id: 3
       author: your_liquibase_username
       changes:
         - createTable:
@@ -65,7 +93,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
   - changeSet:
-      id: 3
+      id: 4
       author: your_liquibase_username
       changes:
         - createTable:
@@ -95,18 +123,162 @@ databaseChangeLog:
                     references: movies(id)
                     nullable: false
   - changeSet:
-      id: 4
+      id: 5
       author: your_liquibase_username
       changes:
         - addUniqueConstraint:
-            columnNames: email, users_name
-            constraintName: constraint_users
+            columnNames: email
+            constraintName: constraint_users_email
             tableName: users
   - changeSet:
-      id: 5
+      id: 6
+      author: your_liquibase_username
+      changes:
+        - addUniqueConstraint:
+            columnNames: users_name
+            constraintName: constraint_users_username
+            tableName: users
+  - changeSet:
+      id: 7
       author: your_liquibase_username
       changes:
         - addUniqueConstraint:
             columnNames: title
             constraintName: constraint_movies
             tableName: movies
+  - changeSet:
+      id: 8
+      author: your_liquibase_username
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 0
+              - column:
+                  name: name
+                  value: "Администратор"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Пользователь"
+  - changeSet:
+      id: 9
+      author: your_liquibase_username
+      changes:
+        - createTable:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: roles_id
+                  type: bigint
+                  autoIncrement: false
+                  constraints:
+                    foreignKeyName: fk_roles
+                    references: roles(id)
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 10
+      author: your_liquibase_username
+      changes:
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: roles_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "updateMySelfUser"
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: roles_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "deleteMySelfUser"
+        - insert:
+            tableName: permissions
+            columns:
+             - column:
+                name: roles_id
+                value: 1
+             - column:
+                name: name
+                value: "readMySelfUser"
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: roles_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "readMySelfUser"
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: roles_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "createMySelfFavoritesMovies"
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: roles_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "readMySelfFavoritesMovies"
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: roles_id
+                  value: 1
+              - column:
+                  name: name
+                  value: "deleteMySelfFavoritesMovies"
+  - changeSet:
+      id: 11
+      author: your_liquibase_username
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: roles_id
+                  value: 0
+              - column:
+                  name: users_name
+                  value: "admin"
+              - column:
+                  name: email
+                  value: "admin@ru.com"
+              - column:
+                  name: name
+                  value: "admin"

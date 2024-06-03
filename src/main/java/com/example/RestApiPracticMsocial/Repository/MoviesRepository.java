@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface MoviesRepository extends JpaRepository<Movies, Long> {
-    @Query("Select idOmdbApi from Movies ORDER BY id DESC limit 1")
+    @Query("Select idOmdbApi from Movies ORDER BY idOmdbApi DESC limit 1")
     public Integer findByGetLastIdOmdb();
 
     @Query("Select id from Movies ORDER BY id DESC limit 1")

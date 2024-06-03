@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,20 +33,6 @@ public class UsersController {
         Users user;
         try {
             UsersDTO usersDTO = mapper.readValue(jsonDTO, UsersDTO.class);
-            System.out.println(usersDTO);
-            if (usersDTO.getUserName() == null || usersDTO.getEmail() == null) {
-                throw new RuntimeException("Пользователь ввёл неверные данные пользователся");
-            }
-            Pattern p = Pattern.compile("\\b[A-Za-z]+@[A-Za-z]+\\.[A-Za-z]{2,4}\\b");
-            Matcher m = p.matcher(usersDTO.getEmail());
-            if (!m.find()) {
-                throw new RuntimeException("Пользователь неверно указал email");
-            }
-            Pattern pat = Pattern.compile("^[A-Za-z]");
-            Matcher mat = pat.matcher(usersDTO.getUserName());
-            if (!mat.find()) {
-                throw new RuntimeException("Пользователь неверно указал username");
-            }
             user = service.create(usersDTO);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (DataIntegrityViolationException er) {
@@ -58,8 +45,8 @@ public class UsersController {
     // метод должен быть недоступен пользователю, т.к используеться для проверки правильности работы,
     // поэтому пагенацию не делал
     @GetMapping
-    public ResponseEntity<List<Users>> readAll() {
-        return new ResponseEntity<>(service.readAll(), HttpStatus.OK);
+    public ResponseEntity<Page<Users>> readAll(@RequestParam("Login") String login,@RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer pageSize){
+        return new ResponseEntity<>(service.readAll(login,page,pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -76,8 +63,8 @@ public class UsersController {
     }
 
     @DeleteMapping()
-    public HttpStatus delete(@RequestParam("User-Id") Long id) {
-        service.delete(id);
+    public HttpStatus delete(@RequestParam("User-Id") Long id,@RequestParam("Login") String login) {
+        service.delete(id,login);
         return HttpStatus.OK;
     }
 }
