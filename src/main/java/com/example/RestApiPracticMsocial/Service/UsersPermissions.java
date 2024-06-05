@@ -14,21 +14,22 @@ import java.util.List;
 public class UsersPermissions {
 
     private final PermissionService permissionService;
+
     @Autowired
     public UsersPermissions(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
 
-    public boolean isUsersPermission(Users users, CommandUserPermissions permissionName){
-        if(users.getRoles().getName().equals("Администратор")){
+    public boolean isUsersPermission(Users users, CommandUserPermissions permissionName) {
+        if (users.getRoles().getName().equals("Администратор")) {
             return true;
         }
         List<Permission> permissionList = permissionService.readAll();
-        for(var i: permissionList){
-            if(i.getRoles().getName().equals(users.getRoles().getName()) && i.getName().equals(permissionName.toString())){
+        for (var i : permissionList) {
+            if (i.getRoles().getName().equals(users.getRoles().getName()) && i.getName().equals(permissionName.toString())) {
                 return true;
             }
         }
-        return false;
+        throw new RuntimeException("У пользователя нет таких прав");
     }
 }

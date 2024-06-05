@@ -49,6 +49,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: password
+                  type: varchar(20)
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+              - column:
                   name: email
                   type: text
                   autoIncrement: false
@@ -276,6 +282,9 @@ databaseChangeLog:
               - column:
                   name: users_name
                   value: "admin"
+              - column:
+                  name: password
+                  value: "Admin0"
               - column:
                   name: email
                   value: "admin@ru.com"

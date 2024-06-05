@@ -1,9 +1,9 @@
 package com.example.RestApiPracticMsocial.Controller;
 
 import com.example.RestApiPracticMsocial.DTO.FavoritesMoviesDTO;
-import com.example.RestApiPracticMsocial.DTO.MoviesDTO;
 import com.example.RestApiPracticMsocial.Model.FavoritesMovies;
-import com.example.RestApiPracticMsocial.Model.Movies;
+import com.example.RestApiPracticMsocial.Model.Users;
+import com.example.RestApiPracticMsocial.JWT.AuthService;
 import com.example.RestApiPracticMsocial.Service.FavoritesMoviesService;
 import com.example.RestApiPracticMsocial.Service.UsersService;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/favoritesMovies")
 @Slf4j
@@ -22,27 +20,26 @@ import java.util.List;
 public class FavoritesMoviesController {
 
     private FavoritesMoviesService service;
+    private UsersService usersService;
+    private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<FavoritesMovies> create(@RequestParam("User-Id") Long id, @RequestBody FavoritesMoviesDTO dto) {
-        return new ResponseEntity<>(service.create(id, dto), HttpStatus.OK);
+    public ResponseEntity<FavoritesMovies> create(@RequestParam("access_token") String token, @RequestBody FavoritesMoviesDTO dto) {
+        Users users = usersService.readByLogin(authService.getLogin(token));
+        return new ResponseEntity<>(service.create(users.getId(), dto), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Page<FavoritesMovies>> readAll(@RequestParam("User-Id") Long id, @RequestParam("page")Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false)Integer page_size) {
-        return new ResponseEntity<>(service.readAll(id,page,page_size), HttpStatus.OK);
-    }
-
-    // Про изменение записей вроде ничего не написано, но пусть будет
-    @PutMapping
-    public ResponseEntity<FavoritesMovies> update(@RequestBody FavoritesMovies favoritesMovies) {
-        return new ResponseEntity<>(service.update(favoritesMovies), HttpStatus.OK);
+    public ResponseEntity<Page<FavoritesMovies>> readAll(@RequestParam("access_token") String token, @RequestParam("page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer page_size) {
+        Users users = usersService.readByLogin(authService.getLogin(token));
+        return new ResponseEntity<>(service.readAll(users.getId(), page, page_size), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public HttpStatus delete(@RequestParam("User-Id") Long id, @RequestParam("favorites_id") Long favorites_id) {
+    public HttpStatus delete(@RequestParam("access_token") String token, @RequestParam("favorites_id") Long favorites_id) {
+        Users users = usersService.readByLogin(authService.getLogin(token));
         FavoritesMovies favoritesMovies = service.readById(favorites_id);
-        if (favoritesMovies.getUser().getId() == id) {
+        if (favoritesMovies.getUser().getId() == users.getId()) {
             service.delete(favorites_id);
             return HttpStatus.OK;
         } else {

@@ -55,7 +55,7 @@ public class SchedulerEvent {
         } else {
             idMovie = movieService.getLastIdOmdb() + 1;
         }
-        for (; hashSetMoviesDTO.size() < 50;) {
+        for (; hashSetMoviesDTO.size() != 50; ) {
             String idMovieStr = String.valueOf(idMovie);
             for (int i = idMovieStr.length(); i < 7; i++) {
                 idMovieStr = "0" + idMovieStr;

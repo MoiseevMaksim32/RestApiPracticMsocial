@@ -2,6 +2,7 @@ package com.example.RestApiPracticMsocial.Service;
 
 import com.example.RestApiPracticMsocial.DTO.FavoritesMoviesDTO;
 import com.example.RestApiPracticMsocial.Model.FavoritesMovies;
+import com.example.RestApiPracticMsocial.Model.Users;
 import com.example.RestApiPracticMsocial.Repository.FavoritesMoviesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
