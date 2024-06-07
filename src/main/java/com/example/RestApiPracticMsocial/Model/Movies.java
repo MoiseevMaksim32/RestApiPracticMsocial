@@ -28,4 +28,14 @@ public class Movies {
     public int hashCode() {
         return title != null ? title.hashCode() : 0;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Movies movies = (Movies) o;
+
+        return title.equals(movies.title);
+    }
 }

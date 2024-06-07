@@ -291,3 +291,31 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "admin"
+  - changeSet:
+      id: 12
+      author: your_liquibase_username
+      changes:
+        - createTable:
+            tableName: refresh_token
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: users_id
+                  type: bigint
+                  autoIncrement: false
+                  constraints:
+                    foreignKeyName: fk_users
+                    references: users(id)
+                    nullable: false
+              - column:
+                  name: token
+                  type: text
+                  autoIncrement: false
+                  constraints:
+                    nullable: false

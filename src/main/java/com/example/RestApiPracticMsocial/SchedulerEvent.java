@@ -1,7 +1,6 @@
 package com.example.RestApiPracticMsocial;
 
 import com.example.RestApiPracticMsocial.DTO.MoviesDTO;
-import com.example.RestApiPracticMsocial.Model.Movies;
 import com.example.RestApiPracticMsocial.Service.MoviesService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,12 +39,14 @@ public class SchedulerEvent {
         this.movieService = moviesService;
     }
 
-    /* Т.к API из задания заблокирован в России,
-     для примера взял другой Api к
-     сожелению в нём нет постарничной навигации
-     для примера беру 50 фильмов и сериалов каждые 3 часа */
+    /* не знаю чего он выбрасывал исключения,
+    у меня сейчас вроде всё работет правильно,
+    обновлил модель фильмов переопределив метод equals
+    сделав проверку теперь он проверяет только названия фильмов,
+    в теории дубликаты в set вообще добавляться не должны,
+    исправил шелудор, теперь он использует cron вырожение*/
 
-    @Scheduled(fixedDelayString = "PT03H")
+    @Scheduled(cron = "0 0 */3 * * *")
     private void MoviesCollectionEvent() {
         int idMovie;
         List<MoviesDTO> moviesDTOList = new ArrayList<>();

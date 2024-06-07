@@ -24,19 +24,19 @@ public class FavoritesMoviesController {
     private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<FavoritesMovies> create(@RequestParam("access_token") String token, @RequestBody FavoritesMoviesDTO dto) {
+    public ResponseEntity<FavoritesMovies> create(@RequestHeader("Authorization") String token, @RequestBody FavoritesMoviesDTO dto) {
         Users users = usersService.readByLogin(authService.getLogin(token));
         return new ResponseEntity<>(service.create(users.getId(), dto), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Page<FavoritesMovies>> readAll(@RequestParam("access_token") String token, @RequestParam("page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer page_size) {
+    public ResponseEntity<Page<FavoritesMovies>> readAll(@RequestHeader("Authorization") String token, @RequestParam("page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer page_size) {
         Users users = usersService.readByLogin(authService.getLogin(token));
         return new ResponseEntity<>(service.readAll(users.getId(), page, page_size), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public HttpStatus delete(@RequestParam("access_token") String token, @RequestParam("favorites_id") Long favorites_id) {
+    public HttpStatus delete(@RequestHeader("Authorization") String token, @RequestParam("favorites_id") Long favorites_id) {
         Users users = usersService.readByLogin(authService.getLogin(token));
         FavoritesMovies favoritesMovies = service.readById(favorites_id);
         if (favoritesMovies.getUser().getId() == users.getId()) {

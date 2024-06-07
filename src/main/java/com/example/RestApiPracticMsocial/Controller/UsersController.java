@@ -28,10 +28,11 @@ public class UsersController {
      * делал первый раз, если есть замечания обязательно пишите*/
 
     @PostMapping
-    public ResponseEntity<JwtResponse> create(@RequestBody String jsonDTO) {
+    public ResponseEntity<JwtResponse> create(@RequestBody UsersDTO usersDTO) {
         Users user;
         try {
-            UsersDTO usersDTO = mapper.readValue(jsonDTO, UsersDTO.class);
+
+           // UsersDTO usersDTO = mapper.readValue(jsonDTO, UsersDTO.class);
             user = service.create(usersDTO);
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setUserName(user.getUsersName());
@@ -40,9 +41,9 @@ public class UsersController {
             return new ResponseEntity<>(tokens, HttpStatus.OK);
         } catch (DataIntegrityViolationException er) {
             throw new RuntimeException("Такой пользователься уже существует");
-        } catch (IOException e) {
+        } /*catch (IOException e) {
             throw new RuntimeException(e.getMessage());
-        }
+        }*/
     }
 
     @PostMapping("login")
@@ -52,12 +53,9 @@ public class UsersController {
     }
 
     @PostMapping("exit")
-    public ResponseEntity<String> exit(@RequestParam("access_token") String token) {
-        String answer = authService.Exit(token);
-        if (answer != null) {
-            return ResponseEntity.ok("Вы вышли");
-        }
-        throw new RuntimeException("Что-то пошло не так");
+    public ResponseEntity<String> exit(@RequestHeader("Authorization") String token) {
+        authService.Exit(token);
+        return ResponseEntity.ok("Вы вышли");
     }
 
     @PostMapping("token")
@@ -67,13 +65,13 @@ public class UsersController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<Users>> readAll(@RequestParam("access_token") String token, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer pageSize) {
+    public ResponseEntity<Page<Users>> readAll(@RequestHeader("Authorization") String token, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer pageSize) {
         String login = authService.getLogin(token);
         return new ResponseEntity<>(service.readAll(login, page, pageSize), HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<Users> readById(@RequestParam("access_token") String token) {
+    public ResponseEntity<Users> readById(@RequestHeader("Authorization") String token) {
         String login = authService.getLogin(token);
         return new ResponseEntity<>(service.readByLogin(login), HttpStatus.OK);
     }
@@ -81,14 +79,14 @@ public class UsersController {
     /*Пользователь может менять свои данные, для этого он должен
      * передать UpdateUserDTO содержащий логин и имя, из условия он может менять только их */
     @PutMapping()
-    public ResponseEntity<Object> update(@RequestParam("access_token") String token, @RequestBody UpdateUserDTO updateUser) {
+    public ResponseEntity<Object> update(@RequestHeader("Authorization") String token, @RequestBody UpdateUserDTO updateUser) {
         String login = authService.getLogin(token);
         return new ResponseEntity<>(service.update(login, updateUser), HttpStatus.OK);
     }
 
     // Админ всё равно должен ввести id для удаления пользователя
     @DeleteMapping()
-    public HttpStatus delete(@RequestParam("User-Id") Long id, @RequestParam("access_token") String token) {
+    public HttpStatus delete(@RequestParam("User-Id") Long id, @RequestHeader("Authorization") String token) {
         String login = authService.getLogin(token);
         service.delete(id, login);
         return HttpStatus.OK;

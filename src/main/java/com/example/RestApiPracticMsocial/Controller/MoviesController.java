@@ -25,13 +25,13 @@ public class MoviesController {
 
     @GetMapping("/All")
     // Если убрать то убудет ошибка неоднозначности, spring считает что методы readAll и getNoMoviesFavoritesUse
-    public ResponseEntity<List<Movies>> readAll(@RequestParam("access_token") String token, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer size) {
+    public ResponseEntity<List<Movies>> readAll(@RequestHeader("Authorization") String token, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer size) {
         String login = authService.getLogin(token);
         return new ResponseEntity<>(service.readAll(page, size).getContent(), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Page<Movies>> getNoMoviesFavoritesUser(@RequestParam("access_token") String token, @RequestParam("loaderType") String loaderType, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer size) {
+    public ResponseEntity<Page<Movies>> getNoMoviesFavoritesUser(@RequestHeader("Authorization") String token, @RequestParam("loaderType") String loaderType, @RequestParam(name = "page") Integer page, @RequestParam(name = "page_size", defaultValue = "15", required = false) Integer size) {
         String login = authService.getLogin(token);
         if (loaderType.equals("sql")) {
             return new ResponseEntity<>(selectedNoFavoritesMoviesSecvice.NoMoviesFavoritesUserSQL(usersService.readByLogin(login).getId(), page, size), HttpStatus.OK);
